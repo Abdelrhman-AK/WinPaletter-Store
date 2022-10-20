@@ -27,12 +27,5 @@ jobs:
           
           createFile:
           
-      - name: Create A File
-        uses: 1arp/create-a-file-action@0.2
-        with:
-          path: 'Themes'
-          file: 'MainDatabase.wpdb'
-          content: ${{ steps.pl.outputs.paths }}
-
       - name: Set output
-        run: echo $i >> MainDatabase.wpdb
+        run: echo {value} >> MainDatabase.wpdb
