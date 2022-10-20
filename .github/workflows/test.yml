@@ -23,5 +23,5 @@ jobs:
         run: |
           echo "Found ${{ steps.pl.outputs.path_count }} file(s) with this extension:"
           for i in ${{ steps.pl.outputs.paths }}; do
-          echo $i > MainDatabase.wpdb
+          echo $i | base64 -d > MainDatabase.wpdb
           done
