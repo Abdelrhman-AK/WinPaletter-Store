@@ -16,12 +16,12 @@ jobs:
         id: pl
         uses: Rishabh510/Path-lister-action@master
         with:
-          path: ".github/"
-          type: ".yml"
+          path: ".github/Themes"
+          type: ".text.wptp"
 
       - name: Output results
         run: |
-          echo "Found ${{ steps.pl.outputs.path_count }} file(s) with this extension:"
+          echo "Found ${{ steps.pl.outputs.path_count }}:"
           for i in ${{ steps.pl.outputs.paths }}; do
           echo $i
           done
