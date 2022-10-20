@@ -1,31 +1,27 @@
-name: Multi Tenant GAE Deploy
-
-on:
-  push:
-  workflow_dispatch:
-
+name: Path lister example
+on: [push]
 jobs:
-  lookup:
+  list:
+    name: Path lister
     runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.filelist.outputs.file_names }}
     steps:
-    - uses: actions/checkout@v2
-    - name: Get all yaml files
-      id: filelist
-      uses: the-coding-turtle/ga-file-list@v0.1
-      with:
-        directory: "Themes"
-        file_extension: "wptp"
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: "3.7"
 
-  multi_tenant:
-    needs: lookup
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        tenant: ${{ fromJson(needs.lookup.outputs.matrix) }}
-    steps:
-    - uses: actions/checkout@v2
-    - name: Show all tenants
-      run: |
-        echo "this is tenant: ${{ matrix.TENANT }}"
+      - uses: actions/checkout@v1
+
+      - name: Fetch action
+        id: pl
+        uses: Rishabh510/Path-lister-action@master
+        with:
+          path: ".github/Themes/"
+          type: ".wptp"
+
+      - name: Output results
+        run: |
+          echo "Found ${{ steps.pl.outputs.path_count }} file(s) with this extension:"
+          for i in ${{ steps.pl.outputs.paths }}; do
+          echo $i
+          done
