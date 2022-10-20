@@ -1,27 +1,35 @@
-name: Path lister example
-on: [push]
+name: Test
+
+on:
+  push:
+    tags-ignore:
+      - '*'
+    branches:
+      - 'master'
+  pull_request:
+  workflow_dispatch:
+
 jobs:
-  list:
-    name: Path lister
+  list-files:
+    runs-on: ubuntu-latest
+    outputs:
+      paths: ${{ steps.list-files.outputs.paths }}
+    steps:
+      - name: List Files
+        id: list-files
+        uses: mirko-felice/list-files-action@v3.0.1
+        with:
+          repo: ${{ github.repository }}
+          ref: ${{ github.ref }}
+          path: "."
+          ext: ".yml"
+  Test:
+    needs: list-files
+    strategy:
+      matrix:
+        paths: ${{ fromJson(needs.list-files.outputs.paths) }}
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Python 3.7
-        uses: actions/setup-python@v1
-        with:
-          python-version: "3.7"
-
-      - uses: actions/checkout@v1
-
-      - name: Fetch action
-        id: pl
-        uses: Rishabh510/Path-lister-action@master
-        with:
-          path: ".github/"
-          type: ".yml"
-
       - name: Output results
         run: |
-          echo "Found ${{ steps.pl.outputs.path_count }}:"
-          for i in ${{ steps.pl.outputs.paths }}; do
-          echo $i >> .github/MainDatabase.wpdb
-          done
+          echo ${{ matrix.paths }}
