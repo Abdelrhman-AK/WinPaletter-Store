@@ -15,8 +15,8 @@ jobs:
       id: filelist
       uses: the-coding-turtle/ga-file-list@v0.1
       with:
-        directory: "gae_yaml"
-        file_extension: "yaml"
+        directory: "Themes"
+        file_extension: "wptp"
 
   multi_tenant:
     needs: lookup
