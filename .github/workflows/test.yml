@@ -25,7 +25,5 @@ jobs:
           echo $i
           done
           
-          createFile:
-          
       - name: Set output
         run: echo {value} >> MainDatabase.wpdb
