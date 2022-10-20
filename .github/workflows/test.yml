@@ -17,7 +17,7 @@ jobs:
         uses: Rishabh510/Path-lister-action@master
         with:
           path: ".github/Themes"
-          type: ".text.wptp"
+          type: ".wptp"
 
       - name: Output results
         run: |
