@@ -20,10 +20,13 @@ jobs:
           path: "Themes"
           type: ".wptp"
 
+      - name: Write File
+        uses: DamianReeves/write-file-action@v1.0
+        with:
+          path: Store.wpdb
+          contents: ${{ steps.pl.outputs.paths }}
+          write-mode: overwrite
+    
       - name: Output results
         run: |
           echo ${{ steps.pl.outputs.paths }}
-          with open('test.txt', 'w') as f:
-            for line in ${{ steps.pl.outputs.paths }}:
-              f.write(line)
-              f.write('\n')
