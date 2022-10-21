@@ -1,5 +1,6 @@
-name: Path lister example
+name: Enumerate Themes
 on: [push]
+
 jobs:
   list:
     name: Path lister
@@ -22,11 +23,5 @@ jobs:
       - name: Output results
         run: |
           for i in ${{ steps.pl.outputs.paths }}; do
-          echo $i
+          echo $i >> $GITHUB_ENV
           done
-          
-      - name: 'Upload Artifact'
-        uses: actions/upload-artifact@v3
-        with:
-         name: my-artifact
-         path: my_file.txt
