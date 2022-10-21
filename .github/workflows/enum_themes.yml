@@ -21,7 +21,8 @@ jobs:
           type: ".wptp"
 
       - name: Output results
+        env:
+          List: ""
         run: |
-          for i in ${{ steps.pl.outputs.paths }}; do
-          echo $i >> $GITHUB_ENV
-          done
+          echo ${{ steps.pl.outputs.paths }} >> Themes.wpdb
+
