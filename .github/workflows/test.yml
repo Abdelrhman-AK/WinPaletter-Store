@@ -25,5 +25,8 @@ jobs:
           echo $i
           done
           
-      - name: Set output
-        run: echo {value} >> MainDatabase.wpdb
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        with:
+         name: my-artifact
+         path: my_file.txt
