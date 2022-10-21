@@ -23,7 +23,7 @@ jobs:
       - name: Write File
         uses: DamianReeves/write-file-action@v1.0
         with:
-          path: ./store.wpdb
+          path: /store.wpdb
           contents: ${{ steps.pl.outputs.paths }}
           write-mode: overwrite
     
