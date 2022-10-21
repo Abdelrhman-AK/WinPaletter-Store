@@ -10,9 +10,9 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: "3.7"
-
+          
       - uses: actions/checkout@v1
-
+      
       - name: Fetch action
         id: pl
         uses: Rishabh510/Path-lister-action@master
@@ -21,8 +21,9 @@ jobs:
           type: ".wptp"
 
       - name: Output results
-        env:
-          List: ""
         run: |
           echo ${{ steps.pl.outputs.paths }}
-
+          with open('test.txt', 'w') as f:
+            for line in ${{ steps.pl.outputs.paths }}:
+              f.write(line)
+              f.write('\n')
