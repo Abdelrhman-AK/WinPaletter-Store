@@ -1,7 +1,7 @@
 name: Enumerate Themes
 on: [push]
 permissions: write-all
-run-name: Enumerate Themes
+run-name: Enumerating themes to be public to all
   
 jobs:
   list:
@@ -25,7 +25,7 @@ jobs:
       - name: Writes File Action
         uses: BoundfoxStudios/action-write-file@v1
         with:
-         path: store.wpdb
+         path: Database/store.wpdb
          contents: ${{ steps.pl.outputs.paths }}
          write-mode: overwrite
     
