@@ -19,13 +19,13 @@ jobs:
         with:
           path: "Themes"
           type: ".wptp"
-
-      - name: Write File
-        uses: DamianReeves/write-file-action@v1.0
+          
+      - name: Writes File Action
+        uses: BoundfoxStudios/action-write-file@v1
         with:
-          path: ./store.wpdb
-          contents: ${{ steps.pl.outputs.paths }}
-          write-mode: overwrite
+         path: store.wpdb
+         contents: ${{ steps.pl.outputs.paths }}
+         write-mode: overwrite
     
       - name: Output results
         run: |
