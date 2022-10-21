@@ -1,6 +1,8 @@
 name: Enumerate Themes
 on: [push]
-
+permissions: write-all
+run-name: Enumerate Themes
+  
 jobs:
   list:
     name: Path lister
