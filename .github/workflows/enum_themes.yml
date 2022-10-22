@@ -29,10 +29,12 @@ jobs:
           path: "Themes"
           type: ".wptp"
           
-      - name: Create file
-        run: |
-         sudo printf ${{ steps.pl.outputs.paths }} > ${{ env.home }}/store.wpdb
-    
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage-report
+          path: output/test/code-coverage.html
+
       - name: Output results
         run: |
           echo ${{ steps.pl.outputs.paths }}
