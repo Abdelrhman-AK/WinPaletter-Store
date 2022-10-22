@@ -23,6 +23,8 @@ import os
   
      f = open('themes.wpdb', 'w')
      f.write(paths, 'w')
+     f.Close()
+
      print(paths)
 
      sys.exit(0) 
