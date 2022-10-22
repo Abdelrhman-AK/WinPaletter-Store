@@ -21,23 +21,10 @@ jobs:
           python-version: "3.7"
           
       - uses: actions/checkout@v1
-      
-      - name: Fetch action
-        id: pl
-        uses: Rishabh510/Path-lister-action@master
-        with:
-          path: "Themes"
-          type: ".wptp"
           
       - name: Execute python script
         run: |
           python enumthemes.py
-
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v3
-        with:
-          name: code-coverage-report
-          path: store.wpdb
 
       - name: Output results
         run: |
