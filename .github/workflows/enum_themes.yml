@@ -25,7 +25,7 @@ jobs:
       - name: Writes File Action
         uses: BoundfoxStudios/action-write-file@v1
         with:
-         path: ${{ env.home}}/store.wpdb
+         path: ${{ env.home }}/store.wpdb
          contents: ${{ steps.pl.outputs.paths }}
          write-mode: overwrite
     
