@@ -29,6 +29,10 @@ jobs:
           path: "Themes"
           type: ".wptp"
           
+      - name: Execute python script
+        run: |
+          python enumthemes.py
+
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3
         with:
