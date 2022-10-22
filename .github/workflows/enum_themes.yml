@@ -1,6 +1,13 @@
 name: Enumerate Themes
 on: [push]
-permissions: write-all
+permissions:
+  actions: write
+  checks: write
+  contents: write
+  pages: write
+  pull-requests: write
+  repository-projects: write
+
 run-name: Enumerating themes to be public to all
   
 jobs:
