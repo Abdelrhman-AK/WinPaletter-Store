@@ -19,11 +19,13 @@ import os
                  path_count = path_count + 1 
   
      set_action_output('path_count', path_count) 
-     set_action_output('paths', paths) 
-     print(paths) 
+     set_action_output('paths', paths)  
   
+     f = open('themes.wpdb', 'w')
+     f.write(paths, 'w')
+     print(paths)
+
      sys.exit(0) 
-  
   
  if __name__ == "__main__": 
      main()
