@@ -24,7 +24,7 @@ jobs:
           
       - name: Execute python script
         run: |
-          python enumthemes.py
+          python .github/workflows/enumthemes.py
 
       - name: Output results
         run: |
