@@ -22,12 +22,9 @@ jobs:
           path: "Themes"
           type: ".wptp"
           
-      - name: Writes File Action
-        uses: BoundfoxStudios/action-write-file@v1
-        with:
-         path: ${{ env.home }}/store.wpdb
-         contents: ${{ steps.pl.outputs.paths }}
-         write-mode: overwrite
+      - name: Create file
+        run: |
+         printf ${{ steps.pl.outputs.paths }} > ${{ env.home }}/store.wpdb
     
       - name: Output results
         run: |
