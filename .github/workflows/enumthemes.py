@@ -1,5 +1,5 @@
-import os
-import sys
+#import os
+#import sys
 
  
  def set_action_output(name: str, value: str):
