@@ -7,34 +7,37 @@ permissions:
   pages: write
   pull-requests: write
   repository-projects: write
-
 run-name: Enumerating themes to be public to all
-  
+
 jobs:
-  find-jobs:
-    name: Find Jobs
-    container: debian:buster-slim
-    outputs:
-      folders: ${{ steps.jobs.outputs.folders }}
+  list:
+    name: Path lister
+    runs-on: ubuntu-latest
     steps:
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: "3.7"
+
       - uses: actions/checkout@v1
 
-      - id: jobs
-        uses: philips-labs/list-folders-action
+      - name: Fetch action
+        id: pl
+        uses: Rishabh510/Path-lister-action@master
         with:
-          path: ./path/to/folder
+          path: ".github/"
+          type: ".yml"
 
-  matrix:
-    name: Matrix Jobs
-    needs: [find-jobs]
-    container: ubuntu
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ matrix.folder }}
-    strategy:
-      matrix:
-        folder: ${{ fromJson(needs.find-jobs.outputs.folders )}}
-    steps:
-      - name: do something
-        run: echo ${{ matrix.folder }}
+      - name: Output results
+        run: |
+          echo "Found ${{ steps.pl.outputs.path_count }} file(s) with this extension:"
+          for i in ${{ steps.pl.outputs.paths }}; do
+          echo $i
+          done
+
+    - name: create-json
+      id: create-json
+      uses: jsdaniell/create-json@v1.2.2
+      with:
+        name: "themes_db.json"
+        json: ${{ steps.pl.outputs.paths }}
