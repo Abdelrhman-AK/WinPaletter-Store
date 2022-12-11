@@ -24,16 +24,9 @@ jobs:
           path: ".github/"
           type: ".yml"
 
-      - name: Output results
-        run: |
-          echo "Found ${{ steps.pl.outputs.path_count }} file(s) with this extension:"
-          for i in ${{ steps.pl.outputs.paths }}; do
-          echo $i
-          done
-
-    - name: create-json
-      id: create-json
-      uses: jsdaniell/create-json@v1.2.2
-      with:
-        name: "themes_db.json"
-        json: ${{ steps.pl.outputs.paths }}
+      - name: create-json
+        id: create-json
+        uses: jsdaniell/create-json@v1.2.2
+        with:
+          name: "themes_db.json"
+          json: ${{ steps.pl.outputs.paths }}
