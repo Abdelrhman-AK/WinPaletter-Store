@@ -9,7 +9,6 @@ permissions:
   repository-projects: write
 run-name: Enumerating themes to be public to all
 
-jobs:
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
