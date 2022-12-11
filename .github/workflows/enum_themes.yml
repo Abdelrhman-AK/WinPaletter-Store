@@ -10,23 +10,9 @@ permissions:
 run-name: Enumerating themes to be public to all
 
 jobs:
-      - name: Set up Python 3.7
-        uses: actions/setup-python@v1
-        with:
-          python-version: "3.7"
-
-      -  uses: actions/checkout@v1
-
-      - name: Fetch action
-        id: pl
-        uses: Rishabh510/Path-lister-action@master
-        with:
-          path: "Themes/"
-          type: ".wpth"
-
       - name: create-json
         id: create-json
         uses: jsdaniell/create-json@v1.2.2
         with:
           name: "themes_db.json"
-          json: ${{ steps.pl.outputs.paths }}
+          json: 'X'
