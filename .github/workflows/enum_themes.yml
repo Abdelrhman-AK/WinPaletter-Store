@@ -10,9 +10,17 @@ permissions:
 run-name: Enumerating themes to be public to all
 
 jobs:
-      -name: create-json
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-go@v1
+        with:
+          go-version: '1.14.6'
+      - name: create-json
         id: create-json
         uses: jsdaniell/create-json@v1.2.2
         with:
-          name: "themes_db.json"
-          json: 'X'
+          name: "devdatatools-firebase-adminsdk.json"
+          json: ${{ secrets.CREDENTIALS_JSON }}
+          dir: "Themes/"
