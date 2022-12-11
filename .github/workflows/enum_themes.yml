@@ -10,7 +10,7 @@ permissions:
 run-name: Enumerating themes to be public to all
 
 jobs:
-      - name: create-json
+      -name: create-json
         id: create-json
         uses: jsdaniell/create-json@v1.2.2
         with:
