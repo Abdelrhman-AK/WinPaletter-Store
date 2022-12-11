@@ -10,10 +10,6 @@ permissions:
 run-name: Enumerating themes to be public to all
 
 jobs:
-  list:
-    name: Path lister
-    runs-on: ubuntu-latest
-    steps:
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
