@@ -1,29 +1,29 @@
-name: Heroku CI - CD
+name: Overwrite some file
 
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-go@v1
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Overwrite file
+        uses: "DamianReeves/write-file-action@master"
         with:
-          go-version: '1.14.6'
-      - run: cd src && go mod vendor
-      - name: create-json
-        id: create-json
-        uses: jsdaniell/create-json@v1.2.2
+          path: path/to/file.js
+          write-mode: overwrite
+          contents: |
+            console.log('some contents')
+            
+      - name: Commit & Push
+        uses: Andro999b/push@v1.3
         with:
-          name: "devdatatools-firebase-adminsdk.json"
-          json: ${{ secrets.CREDENTIALS_JSON }}
-          dir: "src/"
-      - run: git config --global user.email "jose.daniell@outlook.com" && git config --global user.name "jsdaniell" && git add . && git add --force src/devdatatools-firebase-adminsdk.json && git status && git commit -a -m "Deploy Heroku Commit with the Credentials JSON created!"
-      - uses: akhileshns/heroku-deploy@v3.4.6
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "dev-data-tools-api-golang"
-          heroku_email: "jose.daniell@outlook.com"
-          appdir: "src"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+          force: true
+          message: 'Overwritten by Github Actions - ${date}'
