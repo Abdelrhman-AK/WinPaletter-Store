@@ -20,23 +20,8 @@ jobs:
       - name: install python packages
         run: |
           python -m pip install --upgrade pip
-
+          pip install GitPython
+          
       - name: execute py script # run main.py
         id: getfiles
-        run: python main.py Themes wptp
-          
-      - name: Overwrite file
-        uses: "DamianReeves/write-file-action@master"
-        with:
-          path: store.wpdb
-          write-mode: overwrite
-          contents: | 
-            ${{ steps.getfiles.outputs.paths }}
-            
-      - name: Commit & Push
-        uses: Andro999b/push@v1.3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
-          force: true
-          message: "Themes database"
+        run: python main.py Themes wptp store.wpdb
