@@ -22,14 +22,8 @@ jobs:
           python -m pip install --upgrade pip
 
       - name: execute py script # run main.py
-        run: python main.py
-
-      - name: Fetch action
-        id: pl
-        uses: Rishabh510/Path-lister-action@master
-        with:
-          path: "Themes"
-          type: ".wptp"
+        id: getfiles
+        run: python main.py "Themes" ".wptp"
           
       - name: Overwrite file
         uses: "DamianReeves/write-file-action@master"
@@ -37,7 +31,7 @@ jobs:
           path: store.wpdb
           write-mode: overwrite
           contents: | 
-            ${{ steps.pl.outputs.paths }}
+            ${{ steps.getfiles.outputs.paths }}
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
