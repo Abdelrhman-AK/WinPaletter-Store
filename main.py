@@ -1,6 +1,6 @@
 import os
 import sys
-
+from git.repo import Repo
 
 def set_action_output(name: str, value: str):
     with open(os.environ["GITHUB_OUTPUT"], "a") as myfile:
@@ -9,7 +9,10 @@ def set_action_output(name: str, value: str):
 def main():
     path = sys.argv[1]
     extension = '.' + sys.argv[2]
-    print('Searching inside: ' + path)
+    outputfile = sys.argv[3]
+    repo = Repo('/Abdelrhman-AK/WinPaletter-Themes')
+    
+    print('Searching inside directory: ' + path)
     print('for files with extention: ' + extension)
 
     path_count = 0
@@ -24,6 +27,15 @@ def main():
     set_action_output('paths', paths)
     print('The following are found: ')
     print(paths)
+
+    f = open("" + outputfile + "", "w")
+    f.write(paths)
+    f.close()
+
+    repo.index.add(['' + outputfile + ''])
+    repo.index.commit('commit from python')
+    origin = repo.remotes[0]
+    origin.push()
 
     sys.exit(0)
 
