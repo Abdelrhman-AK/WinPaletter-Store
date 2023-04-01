@@ -1,8 +1,10 @@
-name: Enumerate themes into a database file
-
+name: EnumThemes
+run-name: Enumerate themes into a database file 'store.wpdb'
+  
 on:
   push:
     branches: [ main ]
+    paths: Themes/**
   workflow_dispatch:
 
 jobs:
