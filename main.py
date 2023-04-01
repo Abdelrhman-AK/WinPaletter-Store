@@ -24,7 +24,7 @@ def main():
     for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith(f'{extension}'):
-                paths = paths + hashlib.md5(open('' + root + '/' + str(file) + '', 'r')).hexdigest() + '|' + '' + root + '/' + str(file) + '' + ' '
+                paths = paths + hashlib.md5(open('' + root + '/' + str(file) + '', 'r').strip()).hexdigest() + '|' + '' + root + '/' + str(file) + '' + ' '
                 path_count = path_count + 1
 
     set_action_output('path_count', path_count)
