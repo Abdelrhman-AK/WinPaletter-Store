@@ -1,4 +1,4 @@
-name: Overwrite some file
+name: Enumerate themes into a database file
 
 on:
   push:
@@ -12,13 +12,20 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Fetch action
+        id: pl
+        uses: Rishabh510/Path-lister-action@master
+        with:
+          path: ".github/Themes/"
+          type: ".wptp"
+          
       - name: Overwrite file
         uses: "DamianReeves/write-file-action@master"
         with:
-          path: path/to/file.js
+          path: store.wpdb
           write-mode: overwrite
           contents: |
-            console.log('some contents')
+            ${{ steps.pl.outputs.paths }}
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
