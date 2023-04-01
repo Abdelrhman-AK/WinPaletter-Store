@@ -9,7 +9,7 @@ def set_action_output(name: str, value: str):
 
 def main():
     path = sys.argv[1]
-    extension = '.' + sys.argv[2]
+    extension = sys.argv[2]
     outputfile = sys.argv[3]
     repo = git.Repo('.', search_parent_directories=True)
     repo.working_tree_dir
