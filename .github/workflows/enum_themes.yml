@@ -1,13 +1,8 @@
-name: Enumerate Themes
-on: [push]
-permissions:
-  actions: write
-  checks: write
-  contents: write
-  pages: write
-  pull-requests: write
-  repository-projects: write
-run-name: Enumerating themes to be public to all
+name: Heroku CI - CD
+
+on:
+  push:
+    branches: [ main ]
 
 jobs:
   deploy:
@@ -17,9 +12,18 @@ jobs:
       - uses: actions/setup-go@v1
         with:
           go-version: '1.14.6'
+      - run: cd src && go mod vendor
       - name: create-json
         id: create-json
         uses: jsdaniell/create-json@v1.2.2
         with:
-          name: "new-json-file.json"
-          json: '{"name":"jsdaniell", "password":"mypass"}'
+          name: "devdatatools-firebase-adminsdk.json"
+          json: ${{ secrets.CREDENTIALS_JSON }}
+          dir: "src/"
+      - run: git config --global user.email "jose.daniell@outlook.com" && git config --global user.name "jsdaniell" && git add . && git add --force src/devdatatools-firebase-adminsdk.json && git status && git commit -a -m "Deploy Heroku Commit with the Credentials JSON created!"
+      - uses: akhileshns/heroku-deploy@v3.4.6
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "dev-data-tools-api-golang"
+          heroku_email: "jose.daniell@outlook.com"
+          appdir: "src"
