@@ -23,7 +23,7 @@ def main():
     for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith(f'{extension}'):
-                paths = paths + root + '/' + str(file) + '\n'
+                paths = paths + root + '/' + str(file) + os.linesep
                 path_count = path_count + 1
 
     set_action_output('path_count', path_count)
@@ -36,7 +36,7 @@ def main():
     f.close()
 
     repo.index.add(['' + outputfile + ''])
-    repo.index.commit('Themes database is modified ' + datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+    repo.index.commit('Themes database is modified on ' + datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
     origin = repo.remotes[0]
     origin.push()
 
