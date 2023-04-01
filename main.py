@@ -28,7 +28,7 @@ def main():
 
     set_action_output('path_count', path_count)
     set_action_output('paths', paths)
-    print('Found ' + path_count + ' files: ')
+    print('Found ' + str(path_count) + ' files: ')
     print(paths)
 
     f = open("" + outputfile + "", "w")
