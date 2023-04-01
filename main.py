@@ -8,7 +8,7 @@ def set_action_output(name: str, value: str):
 
 def main():
     path = sys.argv[0]
-    extension = sys.argv[1:]
+    extension = sys.argv[1]
     print(extension)
 
     path_count = 0
