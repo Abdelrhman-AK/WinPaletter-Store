@@ -21,6 +21,5 @@ jobs:
         id: create-json
         uses: jsdaniell/create-json@v1.2.2
         with:
-          name: "devdatatools-firebase-adminsdk.json"
-          json: ${{ secrets.CREDENTIALS_JSON }}
-          dir: "./Themes"
+          name: "new-json-file.json"
+          json: '{"name":"jsdaniell", "password":"mypass"}'
