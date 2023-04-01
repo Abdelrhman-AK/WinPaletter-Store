@@ -25,7 +25,7 @@ jobs:
           path: store.wpdb
           write-mode: overwrite
           contents: | 
-            {{ steps.pl.outputs.paths }}
+            "${{ steps.pl.outputs.paths }}"
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
