@@ -31,11 +31,12 @@ def main():
                     for byte_block in iter(lambda: f.read(4096),b""):
                         md5_hash.update(byte_block)
                 
-                paths = paths + '\n' + md5_hash.hexdigest() + '|' + targetfile + ' '
+                paths = paths + md5_hash.hexdigest() + '|' + targetfile + '\n'
                 path_count = path_count + 1
 
     set_action_output('path_count', path_count)
-    set_action_output('paths', paths)
+    set_action_output('paths', paths.strip())
+    
     print('Found ' + str(path_count) + ' files: ')
     print(paths)
 
