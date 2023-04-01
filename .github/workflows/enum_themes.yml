@@ -23,7 +23,7 @@ jobs:
 
       - name: execute py script # run main.py
         id: getfiles
-        run: python main.py Themes .wptp
+        run: python main.py Themes wptp
           
       - name: Overwrite file
         uses: "DamianReeves/write-file-action@master"
