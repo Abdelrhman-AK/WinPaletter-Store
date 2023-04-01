@@ -7,8 +7,9 @@ def set_action_output(name: str, value: str):
         myfile.write(f"{name}={value}\n")
 
 def main():
-    path = sys.argv[0]
-    extension = sys.argv[1]
+    path = sys.argv[1]
+    extension = '.' + sys.argv[2]
+    print(path)
     print(extension)
 
     path_count = 0
