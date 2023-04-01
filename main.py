@@ -23,7 +23,7 @@ def main():
     for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith(f'{extension}'):
-                paths = paths + root + '/' + str(file) + os.linesep
+                paths = paths + root + '/' + str(file) + ' \n '
                 path_count = path_count + 1
 
     set_action_output('path_count', path_count)
