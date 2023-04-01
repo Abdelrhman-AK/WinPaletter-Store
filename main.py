@@ -45,7 +45,7 @@ def main():
     f.close()
 
     repo.index.add(['' + outputfile + ''])
-    repo.index.commit('Themes database is modified on ' + datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+    repo.index.commit('Themes database is modified on ' + datetime.now().strftime("%d/%m/%Y %H:%M:%S") + ' GMT+00:00')
     origin = repo.remotes[0]
     origin.push()
 
