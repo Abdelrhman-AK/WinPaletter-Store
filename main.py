@@ -23,12 +23,12 @@ def main():
     for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith(f'{extension}'):
-                paths = paths + root + '/' + str(file) + ' \n '
+                paths = paths + root + '/' + str(file) + ' '
                 path_count = path_count + 1
 
     set_action_output('path_count', path_count)
     set_action_output('paths', paths)
-    print('The following are found: ')
+    print('Found ' + path_count + ' files: ')
     print(paths)
 
     f = open("" + outputfile + "", "w")
