@@ -1,7 +1,8 @@
 import os
 import sys
 from git.repo import Repo
-
+import git
+    
 def set_action_output(name: str, value: str):
     with open(os.environ["GITHUB_OUTPUT"], "a") as myfile:
         myfile.write(f"{name}={value}\n")
@@ -10,7 +11,8 @@ def main():
     path = sys.argv[1]
     extension = '.' + sys.argv[2]
     outputfile = sys.argv[3]
-    repo = Repo('/Abdelrhman-AK/WinPaletter-Themes')
+    repo = git.Repo('.', search_parent_directories=True)
+    repo.working_tree_dir
     
     print('Searching inside directory: ' + path)
     print('for files with extention: ' + extension)
