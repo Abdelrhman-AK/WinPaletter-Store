@@ -23,4 +23,4 @@ jobs:
         with:
           name: "devdatatools-firebase-adminsdk.json"
           json: ${{ secrets.CREDENTIALS_JSON }}
-          dir: "Themes/"
+          dir: "./Themes"
