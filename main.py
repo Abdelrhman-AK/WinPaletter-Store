@@ -9,8 +9,8 @@ def set_action_output(name: str, value: str):
 def main():
     path = sys.argv[1]
     extension = '.' + sys.argv[2]
-    print(path)
-    print(extension)
+    print('Searching inside: ' + path)
+    print('for files with extention: ' + extension)
 
     path_count = 0
     paths = ''
@@ -22,6 +22,7 @@ def main():
 
     set_action_output('path_count', path_count)
     set_action_output('paths', paths)
+    print('The following are found: ')
     print(paths)
 
     sys.exit(0)
