@@ -35,7 +35,7 @@ def main():
                 path_count = path_count + 1
 
     set_action_output('path_count', path_count)
-    set_action_output('paths', paths.replace('\n', ''))
+    set_action_output('paths', paths.replace('\n', ' '))
     
     print('Found ' + str(path_count) + ' files: ')
     print(paths)
