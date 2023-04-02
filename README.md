@@ -1,2 +1,3 @@
-# WinPaletter-Themes
-WinPaletter Themes Store
+# WinPaletter Store
+WinPaletter Store for themes
+UNDER-CONSTRUCTION
