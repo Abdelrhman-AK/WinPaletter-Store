@@ -14,7 +14,7 @@
 *AppMode_Light= True
 *Transparency= False
 *AccentColorOnTitlebarAndBorders= True
-*AccentColorOnStartTaskbarAndActionCenter= 0
+*AccentColorOnStartTaskbarAndActionCenter= 1
 *Titlebar_Active= -1
 *Titlebar_Inactive= -1
 *ActionCenter_AppsLinks= -6689793
