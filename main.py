@@ -27,12 +27,11 @@ def main():
                 
                 targetfile = root + '/' + str(file)
                 md5_hash = hashlib.md5()
-                md5_hash = md5_hash.upper()
                 with open(targetfile,"rb") as f:
                     for byte_block in iter(lambda: f.read(4096),b""):
                         md5_hash.update(byte_block)
                 
-                paths = paths + md5_hash.hexdigest() + '|' + 'https://github.com/Abdelrhman-AK/WinPaletter-Store/blob/main/' + targetfile + '?raw=true' + '\n'
+                paths = paths + md5_hash.hexdigest().upper() + '|' + 'https://github.com/Abdelrhman-AK/WinPaletter-Store/blob/main/' + targetfile + '?raw=true' + '\n'
                 path_count = path_count + 1
 
     set_action_output('path_count', path_count)
