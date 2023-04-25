@@ -10,11 +10,17 @@ def set_action_output(name: str, value: str):
         myfile.write(f"{name}={value}\n")
 
 def CalcMD5(file):
-    md5_hash = hashlib.md5()
-    with open(file,"rb") as f:
-        for byte_block in iter(lambda: f.read(4096),b""):
-            md5_hash.update(byte_block)
-    return str(md5_hash.hexdigest()).upper()
+    try:
+        if os.path.exists(filePathAndName):
+            md5_hash = hashlib.md5()
+            with open(file,"rb") as f:
+                for byte_block in iter(lambda: f.read(4096),b""):
+                    md5_hash.update(byte_block)
+            return str(md5_hash.hexdigest()).upper()
+        else:
+            return '0'
+    except:
+        return '0'
     
 def main():
     path = sys.argv[1]
