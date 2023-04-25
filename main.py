@@ -27,7 +27,6 @@ def main():
     for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith(f'{extension}'):
-                
                 targetfile = root + '/' + str(file)
                 targetpack = root + '/' + str(file).replace('.wpth', '.wptp')
                 md5_hash_pack_result = '0'        
@@ -39,7 +38,7 @@ def main():
 
                 if FileExists(targetpack):
                     md5_hash_pack = hashlib.md5()
-                    with open(targetpack,"rb") as f:
+                        with open(targetpack,"rb") as f:
                             for byte_block in iter(lambda: f.read(4096),b""):
                                 md5_hash_pack.update(byte_block)    
 
