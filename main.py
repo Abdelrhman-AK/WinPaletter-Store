@@ -9,8 +9,12 @@ def set_action_output(name: str, value: str):
     with open(os.environ["GITHUB_OUTPUT"], "a") as myfile:
         myfile.write(f"{name}={value}\n")
 
-def FileExists(filePathAndName):
-    return os.path.exists(filePathAndName)
+def CalcMD5(file):
+    md5_hash = hashlib.md5()
+    with open(file,"rb") as f:
+        for byte_block in iter(lambda: f.read(4096),b""):
+            md5_hash.update(byte_block)
+    return str(md5_hash.hexdigest()).upper()
     
 def main():
     path = sys.argv[1]
@@ -29,23 +33,12 @@ def main():
             if file.endswith(f'{extension}'):
                 targetfile = root + '/' + str(file)
                 targetpack = root + '/' + str(file).replace('.wpth', '.wptp')
-                md5_hash_pack_result = '0'        
+                md5_hash_file_result = CalcMD5(targetfile)    
+                md5_hash_pack_result = CalcMD5(targetpack)    
+                url_file = 'https://github.com/Abdelrhman-AK/WinPaletter-Store/blob/main/' + targetfile + '?raw=true'
+                url_pack = 'https://github.com/Abdelrhman-AK/WinPaletter-Store/blob/main/' + targetpack + '?raw=true'
 
-                try:
-                    md5_hash_pack = hashlib.md5()
-                    with open(targetpack,"rb") as f:
-                        for byte_block in iter(lambda: f.read(4096),b""):
-                             md5_hash_pack.update(byte_block)    
-                    md5_hash_pack_result = str(md5_hash_pack.hexdigest()).upper()  
-                except:
-                    md5_hash_pack_result = '0'        
-
-                md5_hash_themefile = hashlib.md5()
-                with open(targetfile,"rb") as f:
-                    for byte_block in iter(lambda: f.read(4096),b""):
-                        md5_hash_themefile.update(byte_block)
-
-            paths = paths + str(md5_hash_themefile.hexdigest()).upper() + '|' + md5_hash_result + '|' 'https://github.com/Abdelrhman-AK/WinPaletter-Store/blob/main/' + targetfile + '?raw=true' + '|' + 'https://github.com/Abdelrhman-AK/WinPaletter-Store/blob/main/' + targetpack + '?raw=true' + '\n'
+            paths = paths + md5_hash_file_result + '|' + md5_hash_pack_result + '|' +  url_file + '|' + url_pack + '\n'
             path_count = path_count + 1
 
     set_action_output('path_count', path_count)
