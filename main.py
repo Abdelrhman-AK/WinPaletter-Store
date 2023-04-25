@@ -26,12 +26,19 @@ def main():
             if file.endswith(f'{extension}'):
                 
                 targetfile = root + '/' + str(file)
-                md5_hash = hashlib.md5()
+                targetpack = root + '/' + str(file).replace('.wpth', '.wptp')
+                
+                md5_hash_themefile = hashlib.md5()
                 with open(targetfile,"rb") as f:
                     for byte_block in iter(lambda: f.read(4096),b""):
-                        md5_hash.update(byte_block)
+                        md5_hash_themefile.update(byte_block)
+                        
+                md5_hash_pack = hashlib.md5()
+                with open(targetpack,"rb") as f:
+                    for byte_block in iter(lambda: f.read(4096),b""):
+                        md5_hash_pack.update(byte_block)
                 
-                paths = paths + str(md5_hash.hexdigest()).upper() + '|' + 'https://github.com/Abdelrhman-AK/WinPaletter-Store/blob/main/' + targetfile + '?raw=true' + '\n'
+                paths = paths + str(md5_hash_themefile.hexdigest()).upper() + '|' + str(md5_hash_pack.hexdigest()).upper() + '|' 'https://github.com/Abdelrhman-AK/WinPaletter-Store/blob/main/' + targetfile + '?raw=true' + '|' + 'https://github.com/Abdelrhman-AK/WinPaletter-Store/blob/main/' + targetpack + '?raw=true' + '\n'
                 path_count = path_count + 1
 
     set_action_output('path_count', path_count)
