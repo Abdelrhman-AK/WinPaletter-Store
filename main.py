@@ -40,9 +40,9 @@ def main():
                         
                 if doesFileExists('./test.json'):
                     md5_hash_pack = hashlib.md5()
-                    with open(targetpack,"rb") as f:
-                    for byte_block in iter(lambda: f.read(4096),b""):
-                        md5_hash_pack.update(byte_block)
+                        with open(targetpack,"rb") as f:
+                            for byte_block in iter(lambda: f.read(4096),b""):
+                             md5_hash_pack.update(byte_block)
 
                     md5_hash_pack_result = str(md5_hash_pack.hexdigest()).upper()
 
