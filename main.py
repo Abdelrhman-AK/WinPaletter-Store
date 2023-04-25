@@ -31,22 +31,21 @@ def main():
                 targetpack = root + '/' + str(file).replace('.wpth', '.wptp')
                 md5_hash_pack_result = '0'        
 
-                md5_hash_themefile = hashlib.md5()
-                with open(targetfile,"rb") as f:
-                    for byte_block in iter(lambda: f.read(4096),b""):
-                        md5_hash_themefile.update(byte_block)
-
                 if FileExists(targetpack):
                     md5_hash_pack = hashlib.md5()
                         with open(targetpack,"rb") as f:
                             for byte_block in iter(lambda: f.read(4096),b""):
                                 md5_hash_pack.update(byte_block)    
-
                     md5_hash_pack_result = str(md5_hash_pack.hexdigest()).upper()
 
                 else:
                     md5_hash_pack_result = '0'        
 
+                md5_hash_themefile = hashlib.md5()
+                with open(targetfile,"rb") as f:
+                    for byte_block in iter(lambda: f.read(4096),b""):
+                        md5_hash_themefile.update(byte_block)
+                        
             paths = paths + str(md5_hash_themefile.hexdigest()).upper() + '|' + md5_hash_result + '|' 'https://github.com/Abdelrhman-AK/WinPaletter-Store/blob/main/' + targetfile + '?raw=true' + '|' + 'https://github.com/Abdelrhman-AK/WinPaletter-Store/blob/main/' + targetpack + '?raw=true' + '\n'
             path_count = path_count + 1
 
