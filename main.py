@@ -38,7 +38,7 @@ def main():
 
                 md5_hash_pack_result = '0'        
                         
-                if doesFileExists('./test.json'):
+                if FileExists(targetpack):
                     md5_hash_pack = hashlib.md5()
                         with open(targetpack,"rb") as f:
                             for byte_block in iter(lambda: f.read(4096),b""):
