@@ -9,6 +9,9 @@ def set_action_output(name: str, value: str):
     with open(os.environ["GITHUB_OUTPUT"], "a") as myfile:
         myfile.write(f"{name}={value}\n")
 
+def FileExists(filePathAndName):
+    return os.path.exists(filePathAndName)
+    
 def main():
     path = sys.argv[1]
     extension = sys.argv[2]
@@ -32,13 +35,21 @@ def main():
                 with open(targetfile,"rb") as f:
                     for byte_block in iter(lambda: f.read(4096),b""):
                         md5_hash_themefile.update(byte_block)
+
+                md5_hash_pack_result = '0'        
                         
-                md5_hash_pack = hashlib.md5()
-                with open(targetpack,"rb") as f:
+                if doesFileExists('./test.json'):
+                    md5_hash_pack = hashlib.md5()
+                    with open(targetpack,"rb") as f:
                     for byte_block in iter(lambda: f.read(4096),b""):
                         md5_hash_pack.update(byte_block)
-                
-                paths = paths + str(md5_hash_themefile.hexdigest()).upper() + '|' + str(md5_hash_pack.hexdigest()).upper() + '|' 'https://github.com/Abdelrhman-AK/WinPaletter-Store/blob/main/' + targetfile + '?raw=true' + '|' + 'https://github.com/Abdelrhman-AK/WinPaletter-Store/blob/main/' + targetpack + '?raw=true' + '\n'
+
+                    md5_hash_pack_result = str(md5_hash_pack.hexdigest()).upper()
+
+                else:
+                md5_hash_pack_result = '0'        
+
+                paths = paths + str(md5_hash_themefile.hexdigest()).upper() + '|' + md5_hash_result + '|' 'https://github.com/Abdelrhman-AK/WinPaletter-Store/blob/main/' + targetfile + '?raw=true' + '|' + 'https://github.com/Abdelrhman-AK/WinPaletter-Store/blob/main/' + targetpack + '?raw=true' + '\n'
                 path_count = path_count + 1
 
     set_action_output('path_count', path_count)
