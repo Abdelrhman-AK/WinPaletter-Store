@@ -48,7 +48,7 @@ def main():
                 if exists(targetpack):
                     paths = paths + md5_hash_file_result + '|' + md5_hash_pack_result + '|' +  url_file + '|' + url_pack + '\n'
                 else:
-                    paths = paths + md5_hash_file_result + '|' + md5_hash_pack_result + '|' +  url_file
+                    paths = paths + md5_hash_file_result + '|' + md5_hash_pack_result + '|' +  url_file + '\n'
 
                 path_count = path_count + 1
 
