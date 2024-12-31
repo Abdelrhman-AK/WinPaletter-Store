@@ -44,8 +44,8 @@ def main():
                 targetpack = root + '/' + str(file).replace('.wpth', '.wptp')
                 md5_hash_file_result = CalcMD5(targetfile)    
                 md5_hash_pack_result = CalcMD5(targetpack)    
-                url_file = 'https://github.com/{owner}/{repository_name}/blob/main/' + targetfile + '?raw=true'
-                url_pack = 'https://github.com/{owner}/{repository_name}/blob/main/' + targetpack + '?raw=true'
+                url_file = f'https://github.com/{owner}/{repository_name}/blob/main/' + targetfile + '?raw=true'
+                url_pack = f'https://github.com/{owner}/{repository_name}/blob/main/' + targetpack + '?raw=true'
                 
                 if exists(targetpack):
                     paths = paths + md5_hash_file_result + '|' + md5_hash_pack_result + '|' +  url_file + '|' + url_pack + '\n'
