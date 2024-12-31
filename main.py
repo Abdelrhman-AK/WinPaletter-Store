@@ -29,6 +29,8 @@ def main():
     outputfile = sys.argv[2]
     repo = git.Repo('.', search_parent_directories=True)
     repo.working_tree_dir
+    repository_info = os.getenv("GITHUB_REPOSITORY")
+    owner, repository_name = repository_info.split("/")
     
     print('Searching inside directory: ' + path)
     print('for files with extention: ' + extension)
@@ -42,8 +44,8 @@ def main():
                 targetpack = root + '/' + str(file).replace('.wpth', '.wptp')
                 md5_hash_file_result = CalcMD5(targetfile)    
                 md5_hash_pack_result = CalcMD5(targetpack)    
-                url_file = 'https://github.com/Abdelrhman-AK/WinPaletter-Store/blob/main/' + targetfile + '?raw=true'
-                url_pack = 'https://github.com/Abdelrhman-AK/WinPaletter-Store/blob/main/' + targetpack + '?raw=true'
+                url_file = 'https://github.com/{owner}/{repository_name}/blob/main/' + targetfile + '?raw=true'
+                url_pack = 'https://github.com/{owner}/{repository_name}/blob/main/' + targetpack + '?raw=true'
                 
                 if exists(targetpack):
                     paths = paths + md5_hash_file_result + '|' + md5_hash_pack_result + '|' +  url_file + '|' + url_pack + '\n'
