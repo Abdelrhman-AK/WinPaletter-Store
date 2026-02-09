@@ -67,12 +67,14 @@ def main():
                 md5_file = calc_md5(targetfile)
                 md5_pack = calc_md5(targetpack) if os.path.exists(targetpack) else "0"
 
-                url_file = f'https://github.com/{owner}/{repo_name}/blob/main/{targetfile}?raw=true'
-                
+                # Only include URL if .wpth is not in a hidden directory
+                include_url_file = not any(part.startswith(".") for part in os.path.relpath(targetfile, path).split(os.sep)[:-1])
+                url_file = f'https://github.com/{owner}/{repo_name}/blob/main/{targetfile}?raw=true' if include_url_file else ""
+
                 # Only include URL if .wptp exists and is not in a hidden directory
                 include_url_pack = os.path.exists(targetpack) and not any(part.startswith(".") for part in os.path.relpath(targetpack, path).split(os.sep)[:-1])
                 url_pack = f'https://github.com/{owner}/{repo_name}/blob/main/{targetpack}?raw=true' if include_url_pack else ""
-                
+
                 entry = f"{md5_file}|{md5_pack}|{url_file}"
                 if url_pack:
                     entry += f"|{url_pack}"
