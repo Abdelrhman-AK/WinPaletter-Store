@@ -3,11 +3,12 @@ name: EnumThemes
 run-name: Enumerate themes into a database file 'store.wpdb'
 
 on:
-  # Trigger the workflow on push to 'main' branch or manually via workflow_dispatch
   push:
-    branches: [ main ]    # Trigger on push to the main branch
-    paths: Themes/**      # Trigger only if files in the 'Themes' directory change
-  workflow_dispatch:        # Allows manual triggering from GitHub Actions UI
+    branches: [ '**' ]       # Trigger on any branch
+    paths: Themes/**         # Only run if files in Themes/ change
+  pull_request:
+    branches: [ '**' ]       # Also run on pull requests
+  workflow_dispatch:          # Allow manual triggering
 
 jobs:
   build:
