@@ -1,99 +1,184 @@
 import os
 import sys
-from datetime import datetime
-from git import Repo
 import hashlib
+from datetime import datetime
+from git import Repo, GitCommandError
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
-# Function to set the action output for GitHub Actions workflow
+
+# ------------------------------------------------------------
+# Writes output variables for GitHub Actions workflow steps.
+# If not running inside GitHub Actions, this does nothing.
+# ------------------------------------------------------------
 def set_action_output(name: str, value: str):
-    # Open the GITHUB_OUTPUT file and append the output in the required format
-    with open(os.environ["GITHUB_OUTPUT"], "a") as output_file:
-        output_file.write(f"{name}={value}\n")
+    github_output = os.getenv("GITHUB_OUTPUT")
+    if github_output:
+        with open(github_output, "a", encoding="utf-8") as f:
+            f.write(f"{name}={value}\n")
 
-# Function to calculate the MD5 hash of a given file
+
+# ------------------------------------------------------------
+# Calculates MD5 hash of a file.
+# Returns uppercase hash string.
+# Returns "0" if file is missing, unreadable, or hidden.
+# ------------------------------------------------------------
 def calc_md5(file_path: str) -> str:
+    if not os.path.exists(file_path) or os.path.basename(file_path).startswith("."):
+        return "0"
     try:
-        # Check if the file exists before trying to read
-        if os.path.exists(file_path):
-            md5_hash = hashlib.md5()
-            # Open file in binary mode and read it in chunks
-            with open(file_path, "rb") as f:
-                for byte_block in iter(lambda: f.read(4096), b""):
-                    md5_hash.update(byte_block)
-            return md5_hash.hexdigest().upper()  # Return the MD5 hash as uppercase
+        md5 = hashlib.md5()
+        with open(file_path, "rb") as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                md5.update(chunk)
+        return md5.hexdigest().upper()
     except Exception:
-        # In case of any error, return '0' to indicate failure
-        return '0'
-    # Default return in case file does not exist
-    return '0'
+        return "0"
 
+
+# ------------------------------------------------------------
+# Processes a single .wpth file:
+# - Calculates its MD5
+# - Calculates companion .wptp MD5 if it exists and is not hidden
+# - Builds raw GitHub URLs
+# - Returns formatted database entry string
+# ------------------------------------------------------------
+def process_theme_file(targetfile: str, repo_root: str, owner: str, repo_name: str, ref: str) -> str:
+    extension = ".wpth"
+    targetpack = targetfile.replace(extension, ".wptp")
+
+    # MD5 for the main .wpth file
+    md5_file = calc_md5(targetfile)
+
+    # Only include companion .wptp if it exists and is not hidden
+    if os.path.exists(targetpack) and not os.path.basename(targetpack).startswith("."):
+        md5_pack = calc_md5(targetpack)
+        relative_pack = os.path.relpath(targetpack, repo_root).replace("\\", "/")
+        url_pack = f"https://raw.githubusercontent.com/{owner}/{repo_name}/{ref}/{relative_pack}"
+    else:
+        md5_pack = "0"
+        url_pack = ""
+
+    # Repository-relative path and URL for the .wpth file
+    relative_file = os.path.relpath(targetfile, repo_root).replace("\\", "/")
+    url_file = f"https://raw.githubusercontent.com/{owner}/{repo_name}/{ref}/{relative_file}"
+
+    # Build final database entry
+    entry = f"{md5_file}|{md5_pack}|{url_file}"
+    if url_pack:
+        entry += f"|{url_pack}"
+
+    return entry
+
+
+# ------------------------------------------------------------
+# Main execution entry point
+# ------------------------------------------------------------
 def main():
-    # Get input parameters from command line arguments
-    path = sys.argv[1]  # Directory path to search for files
-    extension = '.wpth'  # File extension to filter
-    outputfile = sys.argv[2]  # Output file where results will be saved
+    if len(sys.argv) < 3:
+        print("Usage: script.py <search_path> <output_file>")
+        sys.exit(1)
 
-    # Get GitHub repository owner, repository name and commiter from the environment variable
+    search_path = sys.argv[1]
+    outputfile = sys.argv[2]
+    extension = ".wpth"
+
+    # Initialize Git repository
+    repo = Repo(".", search_parent_directories=True)
+    repo_root = repo.working_tree_dir
+
+    # Determine GitHub repository owner and name
     repository_info = os.getenv("GITHUB_REPOSITORY")
-    owner, repo_name = repository_info.split("/")
-    committer = os.getenv("GITHUB_ACTOR", "Unknown")  # Defaults to 'Unknown' if not available
+    if repository_info:
+        owner, repo_name = repository_info.split("/")
+    else:
+        # Fallback for local execution
+        repo_name = os.path.basename(repo_root)
+        owner = "unknown"
 
-    # Initialize the git repository object (get current repository)
-    repo = Repo('.', search_parent_directories=True)
+    # Actor who triggered workflow (if applicable)
+    committer = os.getenv("GITHUB_ACTOR", "Unknown")
 
-    print(f'Searching inside directory: {path} for files with extension: {extension}')
+    # Use exact commit SHA for stable URLs
+    ref = os.getenv("GITHUB_SHA") or repo.head.commit.hexsha
 
-    path_count = 0  # Initialize counter for the number of files found
-    paths = []  # List to hold details of the files
+    print(f"Scanning directory: {search_path}")
 
-    # Walk through the directory to find files with the specified extension
-    for root, dirs, files in os.walk(path):
+    # Collect all non-hidden .wpth files and skip hidden directories
+    theme_files = []
+    for root, dirs, files in os.walk(search_path):
+        # Skip hidden directories
+        dirs[:] = [d for d in dirs if not d.startswith(".")]
+
         for file in files:
-            # Only process files with the specified extension
+            # Skip hidden files
+            if file.startswith("."):
+                continue
+
+            # Only include .wpth files
             if file.endswith(extension):
-                targetfile = os.path.join(root, file)  # Full path of the .wpth file
-                targetpack = os.path.join(root, file.replace(extension, '.wptp'))  # Full path of the corresponding .wptp file
-                
-                # Calculate MD5 hashes for both the .wpth and .wptp files
-                md5_file = calc_md5(targetfile)
-                md5_pack = calc_md5(targetpack) if os.path.exists(targetpack) else '0'  # If .wptp file exists, calculate its MD5, else return '0'
+                full_path = os.path.join(root, file)
 
-                # GitHub raw URL for the .wpth file
-                url_file = f'https://github.com/{owner}/{repo_name}/blob/main/{targetfile}?raw=true'
-                # GitHub raw URL for the .wptp file (if exists)
-                url_pack = f'https://github.com/{owner}/{repo_name}/blob/main/{targetpack}?raw=true' if os.path.exists(targetpack) else ''
+                # Skip if any parent directory is hidden
+                relative_parts = os.path.relpath(full_path, search_path).split(os.sep)
+                if any(part.startswith(".") for part in relative_parts[:-1]):
+                    continue
 
-                # Build a string with the required information: MD5 hashes and URLs
-                path_info = f"{md5_file}|{md5_pack}|{url_file}"
-                if url_pack:  # Add the .wptp URL if it exists
-                    path_info += f'|{url_pack}'
+                theme_files.append(full_path)
 
-                # Append the file information to the paths list
-                paths.append(path_info)
-                path_count += 1  # Increment the file count
+    print(f"Found {len(theme_files)} theme files. Calculating hashes in parallel...")
 
-    # Set GitHub Actions output for path count and paths as a single string
-    set_action_output('path_count', path_count)
-    set_action_output('paths', ' '.join(paths))  # Join file paths into a single string for output
+    # Parallel processing using ThreadPoolExecutor for I/O-bound MD5 hashing
+    paths = []
+    with ThreadPoolExecutor() as executor:
+        futures = [
+            executor.submit(process_theme_file, file, repo_root, owner, repo_name, ref)
+            for file in theme_files
+        ]
 
-    # Print the results for the user
-    print(f'Found {path_count} files:')
-    print('\n'.join(paths))  # Print each file's details
+        # Collect results as they complete
+        for future in as_completed(futures):
+            paths.append(future.result())
 
-    # Write the paths data to the output file
-    with open(outputfile, 'w') as f:
-        f.write('\n'.join(paths))  # Join file paths with newlines before writing
+    # Sort results for deterministic output
+    paths.sort()
+    path_count = len(paths)
 
-    # Add the output file to the git index (staging area)
-    repo.index.add([outputfile])
-    # Commit the changes with a timestamp
-    repo.index.commit(f'{committer} has modified the themes database on {datetime.now().strftime("%d/%m/%Y %H:%M:%S")}, provided that GMT is 00:00')
-    # Push the commit to the remote repository
-    repo.remotes[0].push()
+    # Set GitHub Actions outputs
+    set_action_output("path_count", str(path_count))
+    set_action_output("paths", " ".join(paths))
 
-    # Exit the program successfully
+    print(f"Processed {path_count} files successfully.")
+
+    new_content = "\n".join(paths)
+
+    # Avoid unnecessary commits if nothing changed
+    old_content = ""
+    if os.path.exists(outputfile):
+        with open(outputfile, "r", encoding="utf-8") as f:
+            old_content = f.read()
+
+    if new_content != old_content:
+        # Write updated database
+        with open(outputfile, "w", encoding="utf-8") as f:
+            f.write(new_content)
+
+        # Stage and commit changes
+        repo.index.add([outputfile])
+        repo.index.commit(
+            f"{committer} updated themes database on {datetime.utcnow().strftime('%d/%m/%Y %H:%M:%S')} UTC"
+        )
+
+        try:
+            # Push to the current branch
+            repo.git.push("origin", repo.active_branch.name)
+            print("Changes committed and pushed.")
+        except GitCommandError as e:
+            print(f"Push failed: {e}")
+    else:
+        print("No changes detected. Skipping commit.")
+
     sys.exit(0)
 
-# If this script is executed directly, run the main function
+
 if __name__ == "__main__":
     main()
