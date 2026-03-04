@@ -3,7 +3,8 @@
 # WinPaletter Store for Themes
 
 > [!IMPORTANT]
-> WinPaletter now allows you to **add and publish themes directly** in the app starting from **version `1.0.9.8` and higher**. You can manage, upload, and share your custom themes seamlessly. (A dedicated Wiki will provide detailed guidance on this feature.)
+> WinPaletter now allows you to **add and publish themes directly** in the app starting from **version `1.0.9.8` and higher**. You can manage, upload, and share your custom themes seamlessly.
+> Here you are the [Wiki](https://github.com/Abdelrhman-AK/WinPaletter/wiki/GitHub-Manager-Introduction).
 
 ---
 
@@ -16,10 +17,10 @@
    If a copyright violation is detected, please **open an issue** in this repository. The theme may need to be modified to respect copyrights or removed entirely.
 
 3. **Theme Version Compatibility**  
-   Only themes created with **WinPaletter 1.0.7.7 or higher** are supported.  
-   - If your theme was created in an older version, update to WinPaletter 1.0.7.7 or higher.  
+   Only themes created with **WinPaletter `1.0.7.7` or higher** are supported.  
+   - If your theme was created in an older version, update to WinPaletter `1.0.7.7` or higher.  
    - Use the **convert button** in the main form (top area) to upgrade your theme to the latest format before uploading.
-   - This conversion feature is not available in recent updates, so use version 1.0.7.7 to convert your theme.
+   - This conversion feature is not available in recent updates, so use version `1.0.7.7` to convert your theme.
 
 ---
 
@@ -29,8 +30,8 @@
 - Ensure your theme is compatible with the latest WinPaletter format.  
 - Upload your theme, along with any optional resource packs, to this repository inside the `Themes` directory. For better organization, create a subdirectory with your name inside `Themes`.
 - The system will automatically include them in the store database after you do a **pull request**.
+- Finally, do a pull request.
 
 ---
 
 *Note: This repository is intended for sharing compatible WinPaletter themes. Improper or incompatible themes may not appear or function correctly.*
-
